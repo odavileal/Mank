@@ -1,5 +1,6 @@
 import os
 import getpass
+import subprocess
 
 from datetime import datetime
 
@@ -12,7 +13,7 @@ print("MankShell")
 print("VERSÃO 1.0.0")
 
 print
-print("Digite 'ajuda' para mostrar uma lista de comandos")
+print("Digite 'help' para mostrar uma lista de comandos que você pode usar.")
 
 def ajuda():
     print("""
@@ -26,8 +27,8 @@ def ajuda():
     mkdir: cria um novo diretório * mkdir nomedapasta
     cd: Entra em um diretório * cd nomedapasta
     pwd: Mostra o caminho da pasta Atual. exemplo: home/user/documentos
-    rm: Remove o diretório * rm meudiretorio
-    rmdir: enomeia um diretorio * rnmdir projeto > meusite  
+    rmdir: remove um diretório vazio
+    rename: renomeia um diretório
     touch: Cria um arquivo * touch main.jar
           
     """)
@@ -36,24 +37,29 @@ def ajuda():
 
 
 while True:
-        diretorio = os.getcwd()
-        cmd = input(f"{diretorio}~$ ")
 
-        #comandos principais
-        if cmd == "ajuda":
+        #usuário e pastas
+        user = getpass.getuser()
+        diretorio = os.getcwd()
+
+        cmd = input(f"{user}@Mankshell:{diretorio}~$ ")
+        subprocess.run(cmd, shell=True)
+
+        #comandos principais do terminal
+        if cmd == "help":
                 ajuda()
 
-        elif cmd == "limpar":
+        elif cmd == "clear":
                 os.system('cls')
                 os.system('clear')
 
 
-        elif cmd == "sair":
+        elif cmd == "exit":
                 print("Tchaaau")
                 break
                 
         elif cmd == "date":
-                
+                data = datetime.now()
                 print(data.strftime("%H:%M %d/%m/%Y"))
 
 
@@ -66,8 +72,8 @@ while True:
         
         elif cmd == "ls":
                 arquivos = os.listdir();
-                for arquivos in arquivos:
-                        print(arquivos)
+                for arquivo in arquivos:
+                        print(arquivo)
 
        
         elif cmd.startswith("cd "):
@@ -79,7 +85,10 @@ while True:
         
         elif cmd.startswith("mkdir "):
                 pasta = cmd[6:]
-                os.mkdir(pasta);
+                try:
+                        os.mkdir(pasta)
+                except FileExistsError:
+                        print("Essa pasta já existe")
                 
 
         elif cmd.startswith("touch "):
