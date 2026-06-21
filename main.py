@@ -3,11 +3,33 @@ import getpass
 import subprocess
 import json
 import readline
+import platform
+import psutil
+import sys
 from pathlib import Path
+from datetime import datetime
+
+
 
 os.system("clear")
 
-from datetime import datetime
+
+
+def header():
+    print(f"""
+        ███╗   ███╗ █████╗ ███╗   ██╗██╗  ██╗     ██╗    ██████╗     ██████╗ 
+        ████╗ ████║██╔══██╗████╗  ██║██║ ██╔╝    ███║   ██╔═████╗   ██╔═████╗
+        ██╔████╔██║███████║██╔██╗ ██║█████╔╝     ╚██║   ██║██╔██║   ██║██╔██║
+        ██║╚██╔╝██║██╔══██║██║╚██╗██║██╔═██╗      ██║   ████╔╝██║   ████╔╝██║
+        ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██╗     ██║██╗╚██████╔╝██╗╚██████╔╝
+        ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝     ╚═╝╚═╝ ╚═════╝ ╚═╝ ╚═════╝ 
+      
+      VERSÃO 1.1.0, para garantir atualizações vá em 'https://github.com/odavileal/Mank'
+           Digite 'help' para mostrar uma lista de comandos que você pode usar.
+           Use as SETAS PARA CIMA/BAIXO para navegar no histórico! ⬆️⬇️
+      """)
+header()
+
 
 # ═══════════════════════════════════════════════════════════
 # CONFIGURAÇÃO DO HISTÓRICO
@@ -137,27 +159,35 @@ def configurar_readline():
 
 
 
-# RESTO DO PROGRAMA
+# mostrar o mankfetch
+
+def mankfetch(): 
+    info = f"""                                                   
+     __  __           _    __     _      _    
+    |  \/  |__ _ _ _ | |__/ _|___| |_ __| |_  
+    | |\/| / _` | ' \| / /  _/ -_)  _/ _| ' \ 
+    |_|  |_\__,_|_||_|_\_\_| \___|\__\__|_||_|
+                                           
+
+    Usuário : {getpass.getuser()}
+    Sistema : {platform.system()}
+    Kernel  : {platform.release()}
+    Python  : {sys.version.split()[0]}
+    Shell   : MankShell 1.1.0
+    Pasta   : {os.getcwd()}
+    CPU      : {psutil.cpu_percent(interval=1)}
+    RAM      : {round(psutil.virtual_memory().total / (1024**3), 1)}GB
+    Arquitetura : {platform.machine()}
+"""
+    print(info)
+                                                                                         
+
 
 
 # Carrega o histórico ao iniciar
 carregar_historico()
 configurar_readline()
-
-def header():
-    print(f"""
-        ███╗   ███╗ █████╗ ███╗   ██╗██╗  ██╗     ██╗    ██████╗     ██████╗ 
-        ████╗ ████║██╔══██╗████╗  ██║██║ ██╔╝    ███║   ██╔═████╗   ██╔═████╗
-        ██╔████╔██║███████║██╔██╗ ██║█████╔╝     ╚██║   ██║██╔██║   ██║██╔██║
-        ██║╚██╔╝██║██╔══██║██║╚██╗██║██╔═██╗      ██║   ████╔╝██║   ████╔╝██║
-        ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██╗     ██║██╗╚██████╔╝██╗╚██████╔╝
-        ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝     ╚═╝╚═╝ ╚═════╝ ╚═╝ ╚═════╝ 
-      
-      VERSÃO 1.1.0, para garantir atualizações vá em 'https://github.com/odavileal/Mank'
-           Digite 'help' para mostrar uma lista de comandos que você pode usar.
-           Use as SETAS PARA CIMA/BAIXO para navegar no histórico! ⬆️⬇️
-      """)
-header() # mostra o cabeçalho toda vez que se entra no terminal
+ # mostra o cabeçalho toda vez que se entra no terminal
 
 def ajuda():
     print("""
@@ -210,6 +240,9 @@ while True:
             data = datetime.now()
             print(data.strftime("%H:%M %d/%m/%Y"))
             adicionar_ao_historico(cmd)
+
+        elif cmd == "mankfetch":
+            mankfetch()
 
         # ===== COMANDOS DE HISTÓRICO =====
         elif cmd == "history":
